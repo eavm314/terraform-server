@@ -1,0 +1,37 @@
+name: Terraform Server Deploy
+on: workflow_dispatch
+
+jobs:
+  terraform-deploy:
+    runs-on: ubuntu-latest
+    env:
+      TF_VAR_bucket: ${{ vars.BUCKET_NAME }}
+      TF_VAR_region: ${{ vars.AWS_REGION }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up AWS CLI 🤖
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ vars.AWS_REGION }}
+      
+      - name: Check Terraform Backend
+        env:
+          BUCKET_NAME: ${{ vars.BUCKET_NAME }}
+          AWS_REGION: ${{ vars.AWS_REGION }}
+        run: chmod +x ./terraform-backend.sh && ./terraform-backend.sh
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v1
+
+      - name: Terraform Init
+        run: terraform init
+
+      - name: Terraform Plan
+        run: terraform plan
+
+      - name: Terraform Apply
+        run: terraform apply -auto-approve
