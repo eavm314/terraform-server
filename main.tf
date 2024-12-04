@@ -1,23 +1,14 @@
-variable "bucket" {
-  description = "The S3 bucket to store the Terraform state file"
-}
-
-variable "region" {
-  default = "us-east-1"
-  description = "The AWS region to deploy the resources"
-}
-
 terraform {
   backend "s3" {
-    bucket       = var.bucket
+    bucket       = "terraform-state-devops-2024"
     key          = "backend/terraform.tfstate"
-    region       = var.region
+    region       = "us-east-1"
     use_lockfile = true
   }
 }
 
 provider "aws" {
-  region = var.region
+  region = "us-east-1"
 }
 
 resource "aws_instance" "nginx-server" {
