@@ -33,8 +33,8 @@ resource "aws_instance" "nginx-server" {
   vpc_security_group_ids      = [aws_security_group.nginx-server-sg.id]
 }
 
-resource "aws_security_group" "nginx-server-sg" {
-  name        = "nginx-server-sg"
+resource "aws_security_group" "nginx-sg" {
+  name        = "nginx-sg"
   description = "Security group allowing SSH and HTTP access"
 
 
