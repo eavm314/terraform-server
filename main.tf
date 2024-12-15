@@ -30,7 +30,7 @@ resource "aws_instance" "nginx-server" {
              sudo systemctl start nginx
              EOF
   user_data_replace_on_change = true
-  vpc_security_group_ids      = [aws_security_group.nginx-server-sg.id]
+  vpc_security_group_ids      = [aws_security_group.nginx-sg.id]
 }
 
 resource "aws_security_group" "nginx-sg" {
